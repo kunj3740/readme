@@ -60,6 +60,7 @@ export const Blogs = () => {
                 />
             ))}
         </div>
+        <div className="h-[30px]"></div>
     </div>
 </div>
 }

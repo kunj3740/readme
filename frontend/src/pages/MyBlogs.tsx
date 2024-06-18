@@ -65,8 +65,8 @@ const Myblogs = () => {
             .filter((blog) => !deleted.includes(blog.id)) // Filter out deleted blogs
             .map((blog) => (
               <div key={blog.id} className="mb-4 flex">
-                <Link to={`/blog/${blog.id}`}>
-                  <div className="p-4 border-b border-slate-300  mt-1 pb-4 w-[400px] sm:w-screen sm:max-w-screen-md cursor-pointer" > 
+                
+                  <div className="p-4 border-b border-slate-300  mt-1 pb-4 w-[400px] sm:w-screen sm:max-w-screen-md " > 
                         <div className="flex justify-between">
                           <div className="flex items-center">
                                 <Avatar name = {blog.author.name} /> 
@@ -88,9 +88,11 @@ const Myblogs = () => {
                               </button>
                           </div>
                         </div>
-                        <div className="text-xl font-semibold pt-2">
-                            {blog.title}
-                        </div>
+                        <Link to={`/blog/${blog.id}`}>
+                          <div className="text-xl font-semibold hover:underline pt-2 cursor-pointer">
+                              {blog.title}
+                          </div>
+                        </Link>
                         <div className="text-md font-thin">
                             {blog.content.slice(0,200) + "..."}
                         </div>
@@ -99,7 +101,6 @@ const Myblogs = () => {
                             read` }
                         </div>
                   </div>
-                </Link>
                 {/* <BlogCard
                   id={blog.id}
                   authorName={blog.author.name || "Anonymous"}
