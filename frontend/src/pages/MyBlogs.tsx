@@ -64,7 +64,7 @@ const Myblogs = () => {
                   publishedDate={"2nd Feb 2024"}
                 />
                 <button
-                  className="h-[10px] text-red-500 font-semibold py-2 px-4 rounded  transition duration-300 ease-in-out transform hover:-translate-y-1 mt-2"
+                  className="h-[10px]  font-semibold py-2 px-4 rounded  transition duration-300 ease-in-out transform hover:-translate-y-1 mt-2"
                   onClick={() => deleteHandler(blog.id)}
                 >
                    Delete 
