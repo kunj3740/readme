@@ -3,14 +3,8 @@ import { ChangeEvent, useState } from "react";
 import { Link , useNavigate} from "react-router-dom"
 import { BACKEND_URL } from "../config";
 import  axios  from "axios";
-import { z } from 'zod'
+import { SignupInput } from "@kunj3740/medium-common";
 
-export const  signupInput = z.object({
-    username: z.string().email(),
-    password: z.string().min(6),
-    name: z.string().optional()
-})
-export type SignupInput = z.infer<typeof signupInput>
 
 export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
     const navigate = useNavigate();
