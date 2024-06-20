@@ -68,7 +68,7 @@ userRouter.post('/signup', async(c) => {
     try{
       const user = await prisma.user.findFirst({
         where:{
-          username: body.email,
+          username: body.username,
           password: body.password,
   
         },
