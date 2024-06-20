@@ -5,7 +5,6 @@ import { BACKEND_URL } from "../config";
 import  axios  from "axios";
 import { SignupInput } from "@kunj3740/medium-common";
 
-
 export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
     const navigate = useNavigate();
     const [postInputs,setPostInputs] = useState<SignupInput>({
@@ -21,6 +20,7 @@ export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
             localStorage.setItem("token",jwt);
             navigate("/blogs");
          } catch(e){
+              console.log(e);
               alert("while siging");
          }
     }
@@ -40,13 +40,13 @@ export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
                     </div>
                 </div>
                 <div className="pt-8">
-                        {type==="signup" ? <LabelledInput label="Name" placeholder="kunj...." onChange={(e) => {
+                        {type==="signup" ? <LabelledInput label="Name" placeholder="dhruv patel...." onChange={(e) => {
                         setPostInputs({
                             ...postInputs,
                             name: e.target.value
                         })
                         }} /> : null}
-                        <LabelledInput label="Username" placeholder="kunj@gmail.com" onChange={(e) => {
+                        <LabelledInput label="Username" placeholder="dhruv@gmail.com" onChange={(e) => {
                         setPostInputs({
                             ...postInputs,
                             username: e.target.value
