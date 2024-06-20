@@ -40,7 +40,7 @@ userRouter.post('/signup', async(c) => {
         id: user.id,
         name : user.name,
         username : user.username
-      },c.env.JWT_SECRET);
+      },"kunjdave");
       // console.log(jwt)
       return c.json(jwt)
      
@@ -83,7 +83,7 @@ userRouter.post('/signup', async(c) => {
         id: user.id,
         name : user.name,
         username : user.username
-      },c.env.JWT_SECRET);
+      },"kunjdave");
   
       return c.json(jwt)
      
