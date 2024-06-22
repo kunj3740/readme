@@ -111,7 +111,8 @@ blogRouter.get('/bulk', async(c) => {
                 select:{
                     name:true
                 }
-            }
+            },
+            publishedDate : true
         }
     });
 
@@ -144,6 +145,7 @@ blogRouter.get('/userid', async(c) => {
                 name: true,
               },
             },
+            publishedDate : true
           },
         });
     
@@ -176,7 +178,8 @@ blogRouter.get('/:id', async (c) => {
                     select:{
                         name:true
                     }
-                }
+                },
+                publishedDate: true,
             }
         })
 

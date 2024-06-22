@@ -6,14 +6,28 @@ interface BlogCardProps {
     authorName: string;
     title: string;
     content: string;
-    publishedDate: string;
+    publishedDate: Date;
 }
+
+const formatDate = (date: string | Date): string => {
+    const dateObj = (typeof date === "string") ? new Date(date) : date;
+    const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    };
+    return dateObj.toLocaleDateString('en-GB', options);
+};
+
+
+
 export const BlogCard = ({
     id,
     authorName,
     title,
     content,
     publishedDate
+    
 }:BlogCardProps) => {
     return <Link to={`/blog/${id}`}>
     <div className="p-4 border-b border-slate-300  mt-1 pb-4  md:w-screen max-w-screen-md cursor-pointer" > 
@@ -25,7 +39,7 @@ export const BlogCard = ({
                     <Circle/>
                 </div>
                 <div className="pl-2 font-thin  text-sm justify-center flex-col">
-                   {publishedDate}
+                {formatDate(publishedDate)}
                 </div>
            </div>
            <div className="text-xl font-semibold pt-2">

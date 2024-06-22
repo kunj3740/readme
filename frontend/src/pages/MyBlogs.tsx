@@ -15,6 +15,17 @@ interface BlogCardProps {
   publishedDate: string;
 }
 
+const formatDate = (date: string | Date): string => {
+  const dateObj = (typeof date === "string") ? new Date(date) : date;
+  const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+  };
+  return dateObj.toLocaleDateString('en-GB', options);
+};
+
+
 const Myblogs = () => {
     const { loading, blogs } = useUserBlogs();
     const [deleted, setDeleted] = useState<number[]>([]);
@@ -76,7 +87,7 @@ const Myblogs = () => {
                                     <Circle/>
                                 </div>
                                 <div className="pl-2 font-thin  text-sm justify-center flex-col">
-                                  {"2nd Feb 2024"}
+                                  {formatDate(blog.publishedDate)}
                                 </div>
                           </div>
                           <div>

@@ -49,17 +49,28 @@ import { Blog } from "../hooks"
 import { Appbar } from "./Appbar"
 import { Avatar } from "./BlogCard"
 
+const formatDate = (date: string | Date): string => {
+    const dateObj = (typeof date === "string") ? new Date(date) : date;
+    const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    };
+    return dateObj.toLocaleDateString('en-GB', options);
+};
+
+
 export const FullBlog = ({ blog }: {blog: Blog}) => {
     return <div>
         <Appbar />
         <div className="flex justify-center">
             <div className="grid grid-cols-12 px-10 w-full pt-200 max-w-screen-xl pt-12">
                 <div className="col-span-8">
-                    <div className="text-3xl md:text-5xl font-extrabold">
+                    <div className="text-5xl font-extrabold">
                         {blog.title}
                     </div>
                     <div className="text-slate-500 pt-2">
-                        Post on 2nd December 2023
+                       {formatDate(blog.publishedDate)}
                     </div>
                     <div className="pt-4 whitespace-break-spaces">
                         {blog.content}
@@ -70,7 +81,7 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
                         Author
                     </div>
                     <div className="flex w-full">
-                        <div className="pr-4 hidden md:flex flex-col justify-center">
+                        <div className="pr-4 flex flex-col justify-center">
                             <Avatar size="big" name={blog.author.name || "Anonymous"} />
                         </div>
                         <div>

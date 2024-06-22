@@ -5,12 +5,13 @@ import { BACKEND_URL } from "../config";
 
 
 export interface Blog {
-    "content": string;
-    "title": string;
-    "id": number
-    "author": {
-        "name": string
-    }
+    content: string;
+    title: string;
+    id: number;
+    publishedDate: Date;
+    author: {
+        name: string;
+    };
 }
 
 export const useBlog = ({ id }: { id: string }) => {
