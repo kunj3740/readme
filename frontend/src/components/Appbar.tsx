@@ -61,11 +61,12 @@ export const Appbar = () => {
   return (
     <nav className="p-4 w-full shadow-md shadow-slate-100">
       <div className="container mx-auto flex items-center justify-between ">
-        <div className="text-black text-xl font-semibold ml-5">
-          <Link to='/blogs' className="hover:text-gray-300">
+        <Link to="/blogs" className="text-black text-xl font-semibold items-center ml-3 flex">
+          <div className='h-[30px] mr-2'><img className=' rounded h-[30px]' src="../images/articlenew.jpg" alt="" /></div>
+          <div className="text-2xl text-slate-800">
             Read-Me
-          </Link>
-        </div>
+          </div>
+        </Link>
         <div className="flex items-center justify-center space-x-4">
           {isLoggedIn ? (
             <>
