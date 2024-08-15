@@ -42,7 +42,7 @@ export const BlogCard = ({
                 {formatDate(publishedDate)}
                 </div>
            </div>
-           <div className="text-xl font-semibold pt-2">
+           <div className="text-xl font-semibold pt-2 hover:underline">
               {title}
            </div>
            <div className="text-md font-thin">
