@@ -125,7 +125,7 @@ const Myblogs = () => {
                           </div>
                           <div>
                               <button
-                              className="h-[10px] text-xl text-red-600 font-semibold md:py-2 md:px-4 rounded  transition duration-300 ease-in-out transform hover:-translate-y-1 mt-2"
+                              className="h-[10px] md:text-xl text-red-600 font-semibold md:py-2 md:px-4 rounded  transition duration-300 ease-in-out transform hover:-translate-y-1 mt-2"
                               onClick={() => deleteHandler(blog.id)}
                               >
                                 Delete 
@@ -143,7 +143,7 @@ const Myblogs = () => {
                         <div onClick={() => {
                           setIsUpdating(true);
                           setEditBlog(blog);
-                        }} className="pt-4 font-semibold text-xl cursor-pointer text-blue-700 md:py-2  rounded  transition duration-300 ease-in-out transform hover:-translate-y-1">
+                        }} className="pt-4 font-semibold md:text-xl cursor-pointer text-blue-700 md:py-2  rounded  transition duration-300 ease-in-out transform hover:-translate-y-1">
                             Update
                         </div>
                   </div>
