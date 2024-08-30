@@ -20,6 +20,7 @@ import  { useState, useEffect } from 'react';
 import { Avatar } from "./BlogCard";
 import { Link, useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode"
+import toast from 'react-hot-toast';
 interface MyToken {
   name: string;
   username:string;
@@ -53,6 +54,7 @@ export const Appbar = () => {
   };
 
   const handleLogout = () => {
+    toast.success("Logged Out!")
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/');

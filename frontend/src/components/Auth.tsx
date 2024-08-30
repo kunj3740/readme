@@ -4,6 +4,7 @@ import { Link , useNavigate} from "react-router-dom"
 import { BACKEND_URL } from "../config";
 import  axios  from "axios";
 import { SignupInput } from "@kunj3740/medium-common";
+import toast from "react-hot-toast";
 
 export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
     const navigate = useNavigate();
@@ -15,13 +16,18 @@ export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
     
     async function sendRequest(){
          try{
+            toast.loading("Auth in progress")
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type==="signup" ? "signup":"signin"}`,postInputs);
+            if( !response ){
+                toast.error("error while logging!")
+            }
+            toast.dismiss();
+            toast.success("Loggen In!");
             const jwt =  response.data;
             localStorage.setItem("token",jwt);
             navigate("/blogs");
          } catch(e){
-              console.log(e);
-              alert("while siging");
+            toast.error("error while logging!")
          }
     }
 

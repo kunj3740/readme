@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { updateBlogInput } from "@kunj3740/medium-common";
+import toast from "react-hot-toast";
 
 interface BlogCardProps {
   id: number;
@@ -60,26 +61,26 @@ const Myblogs = () => {
               }
             }
           );
+          toast.success("Blog Deleted SucessFully!")
           setDeleted((prev) => [...prev, id]); // Add the deleted blog ID to the state
         } catch (error) {
-          console.error('Error deleting blog:', error);
-          alert('Error deleting blog');
+          toast.error("error")
         }
       };
       const handleUpdate = async () => {
         if (editBlog) {
           try {
-            console.log(editBlog)
             await axios.post(`${BACKEND_URL}/api/v1/blog/updateBlog`, editBlog, {
               headers: {
                   Authorization: localStorage.getItem("token")
               }
-          });            
+          });          
+          toast.success("Blog updated SucessFully!")
           setBlogs(blogs.map<Blog>(blog => blog.id === editBlog.id ? editBlog : blog));
             setEditBlog(null);
             setIsUpdating(false);
           } catch (error) {
-            console.error("Error updating flashcard:", error);
+            toast.error("Error while updating blog")
           }
         }
       }
