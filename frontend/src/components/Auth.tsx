@@ -27,6 +27,7 @@ export const Auth = ( { type }:{type:"signup" | "signin"}) =>{
             localStorage.setItem("token",jwt);
             navigate("/blogs");
          } catch(e){
+            toast.dismiss();
             toast.error("error while logging!")
          }
     }
