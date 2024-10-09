@@ -1,6 +1,6 @@
 import { Appbar } from "../components/Appbar"
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+import { BACKEND_URL, RAG_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
@@ -31,7 +31,7 @@ export const Publish = () => {
                         }
                     });
                     
-                    const res = await axios.post("http://127.0.0.1:8787/", {
+                    const res = await axios.post(`${RAG_URL}`, {
                         title,
                         content: description
                     });
