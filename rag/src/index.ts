@@ -8,7 +8,22 @@ import { cors } from 'hono/cors';
 
 const app = new Hono()
 app.use('*', cors());
-app.post('/', async(c) => {
+
+app.post("/question" , async(c) => {
+  
+  const body = await c.req.json();
+  const question = body.question;
+
+  
+  try{
+
+  }
+  catch(e){
+    
+  }
+})
+
+app.post('/embed', async(c) => {
 
     try{
 
