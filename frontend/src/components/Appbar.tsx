@@ -26,7 +26,7 @@ export const Appbar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,8 +45,6 @@ export const Appbar = () => {
     getUser();
 
     // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    setIsDarkMode(savedTheme === 'dark');
   }, []);
 
   useEffect(() => {
@@ -76,12 +74,9 @@ export const Appbar = () => {
     navigate('/');
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
+  
   return (
-    <nav className={`${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'} p-4 w-full shadow-lg transition-colors duration-300`}>
+    <nav className={`${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'} p-4 w-full shadow-lg shadow-purple-800 transition-colors duration-300`}>
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/blogs" className="text-xl font-semibold items-center ml-3 flex">
           <div className='h-[30px] mr-2'>
@@ -92,17 +87,7 @@ export const Appbar = () => {
           </div>
         </Link>
         <div className="flex items-center justify-center space-x-4">
-          <button
-            onClick={toggleDarkMode}
-            className={`p-2 rounded-full ${
-              isDarkMode 
-                ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' 
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-            } transition-colors duration-300`}
-            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
+                
           {isLoggedIn ? (
             <>
               <Link

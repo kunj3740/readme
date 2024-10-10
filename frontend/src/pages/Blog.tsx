@@ -1,6 +1,5 @@
 import { Appbar } from "../components/Appbar";
-import { FullBlog } from "../components/FullBlog";
-import { Spinner } from "../components/Spinner";
+import { FullBlog, Skeleton } from "../components/FullBlog";
 import { useBlog } from "../hooks";
 import {useParams} from "react-router-dom";
 
@@ -11,19 +10,17 @@ export const Blog = () => {
         id: id || ""
     });
 
-    if (loading || !blog) {
-        return <div>
-            <Appbar />
-        
-            <div className="h-screen flex flex-col justify-center">
-                
-                <div className="flex justify-center">
-                    <Spinner />
-                </div>
+    
+    return <div>
+    {loading || !blog ? (
+        <div className="">
+            <div className="">
+                <Appbar/>
+                <Skeleton isDarkMode={true}/>
             </div>
         </div>
-    }
-    return <div>
+    ) : (
         <FullBlog blog={blog} />
-    </div>
+    )}
+</div>
 }

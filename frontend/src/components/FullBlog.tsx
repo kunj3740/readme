@@ -9,7 +9,7 @@ interface ThemeProps {
 
 function Avatar({ name, isDarkMode }: { name: string; isDarkMode: boolean }) {
   return (
-    <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 ${
+    <div className={`w-12 h-12 border-slate-400 border-2 rounded-full flex items-center justify-center transition-colors duration-300 ${
       isDarkMode 
         ? 'bg-purple-900 text-purple-100' 
         : 'bg-indigo-100 text-indigo-900'
@@ -37,7 +37,6 @@ const Chatbot = ({ isOpen, setIsOpen, isDarkMode }: { isOpen: boolean; setIsOpen
     e.preventDefault()
     if (inputValue.trim()) {
       setMessages([...messages, { text: inputValue, isUser: true }])
-      // Simulate a bot response
       setTimeout(() => {
         setMessages(prev => [...prev, { text: "Thanks for your message! This is a demo response.", isUser: false }])
       }, 1000)
@@ -95,10 +94,12 @@ const Chatbot = ({ isOpen, setIsOpen, isDarkMode }: { isOpen: boolean; setIsOpen
 export const FullBlog = ({ blog }: {blog: Blog}) => {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
     setIsDarkMode(savedTheme === 'dark')
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
@@ -112,44 +113,57 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
-      isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'
+      isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'
     }`}>
       <Appbar />
       <div className="flex justify-center">
         <div className="grid grid-cols-12 px-5 w-full max-w-screen-xl pt-8">
           <div className="col-span-12 md:col-span-8">
-            <div className={`text-3xl md:text-5xl font-extrabold ${
-              isDarkMode ? 'text-purple-300' : 'text-indigo-600'
-            }`}>
-              {blog.title}
-            </div>
-            <div className={`pt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              {formatDate(blog.publishedDate)}
-            </div>
-            <div className="pt-4 whitespace-pre-wrap">
-              {blog.content}
-            </div>
+            {isLoading ? (
+              <Skeleton isDarkMode={isDarkMode} />
+            ) : (
+              <>
+                <div className={`text-3xl md:text-5xl font-extrabold leading-tight md:leading-snug ${
+                  isDarkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600' 
+                            : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-purple-600'
+                }`}>
+                  {blog.title}
+                </div>
+                <div className={`pt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {formatDate(blog.publishedDate)}
+                </div>
+                <div className="pt-4 whitespace-pre-wrap text-purple-200">
+                  {blog.content}
+                </div>
+              </>
+            )}
           </div>
           {!isChatOpen && (
             <div className="col-span-12 md:col-span-4 md:ml-16 mt-8 md:mt-0">
-              <div className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Author
-              </div>
-              <div className="flex w-full mt-2">
-                <div className="pr-4 flex flex-col justify-center">
-                  <Avatar name={blog.author.name || "Anonymous"} isDarkMode={isDarkMode} />
-                </div>
+              {isLoading ? (
+                <Skeleton isDarkMode={isDarkMode} />
+              ) : (
                 <div>
-                  <div className={`text-xl font-bold ${
-                    isDarkMode ? 'text-purple-300' : 'text-indigo-600'
-                  }`}>
-                    {blog.author.name || "Anonymous"}
+                  <div className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Author
                   </div>
-                  <div className={`pt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                    Random catch phrase about the author's ability to grab the user's attention
-                  </div>
+                  <div className="flex w-full mt-2">
+                    <div className="pr-4 flex flex-col justify-center">
+                      <Avatar name={blog.author.name || "Anonymous"} isDarkMode={isDarkMode} />
+                    </div>
+                    <div>
+                      <div className={`text-xl font-bold ${
+                        isDarkMode ? 'text-purple-200' : 'text-indigo-600'
+                      }`}>
+                        {blog.author.name || "Anonymous"}
+                      </div>
+                      <div className={`pt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Random catch phrase about the author's ability to grab the user's attention
+                      </div>
+                    </div>
+                  </div>  
                 </div>
-              </div>  
+              )}
             </div>
           )}
         </div>
@@ -182,3 +196,29 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
     </div>
   )
 }
+export const Skeleton = ({ isDarkMode }: ThemeProps) => {
+  return (
+
+    <div className={`animate-pulse h-screen w-screen flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      
+      <div className="mb-6 w-full max-w-screen-lg">
+        <div className={`h-10 md:h-14 rounded-lg ${isDarkMode ? 'bg-purple-700' : 'bg-rose-300'}`}></div>
+      </div>
+      <div className="mb-4 w-full max-w-screen-lg">
+        <div className={`h-6 w-1/4 rounded-lg ${isDarkMode ? 'bg-purple-600' : 'bg-rose-200'}`}></div>
+      </div>
+      <div className="space-y-4 w-full max-w-screen-lg">
+        {[...Array(3)].map((_, index) => (
+          <div key={index} className={`h-4 rounded-lg ${isDarkMode ? 'bg-purple-700' : 'bg-rose-200'}`}></div>
+        ))}
+      </div>
+      <div className="mt-8 flex items-center w-full max-w-screen-lg">
+        <div className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-purple-700' : 'bg-rose-300'}`}></div>
+        <div className="ml-4">
+          <div className={`h-5 w-24 rounded-lg ${isDarkMode ? 'bg-purple-600' : 'bg-rose-200'}`}></div>
+          <div className={`mt-2 h-4 w-40 rounded-lg ${isDarkMode ? 'bg-purple-700' : 'bg-rose-200'}`}></div>
+        </div>
+      </div>
+    </div>
+  );
+};

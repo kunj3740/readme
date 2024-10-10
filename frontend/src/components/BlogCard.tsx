@@ -61,7 +61,7 @@ export function BlogCard({
   content,
   publishedDate,
   tags = [],
-  isDarkMode = false
+  isDarkMode = true
 }: BlogCardProps) {
   const readTime = estimateReadTime(content)
 

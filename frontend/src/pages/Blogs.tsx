@@ -10,7 +10,7 @@ export const Blogs = () => {
   const { loading, blogs } = useBlogs()
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([])
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(true)
 
   useEffect(() => {
     const results = blogs.filter((blog) =>
@@ -34,15 +34,10 @@ export const Blogs = () => {
       <Appbar />
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto mb-10 text-center relative">
-          <button
-            onClick={toggleDarkMode}
-            className="absolute right-0 top-0 p-2 rounded-full bg-opacity-20 bg-white dark:bg-opacity-20 dark:bg-gray-800 text-yellow-500 dark:text-indigo-400 hover:bg-opacity-30 dark:hover:bg-opacity-30 transition-all duration-300"
-            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {isDarkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
-          </button>
-          <h1 className={`text-5xl font-bold mb-4 ${
-            isDarkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600' : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-purple-600'
+          
+          <h1 className={`text-3xl md:text-5xl font-extrabold leading-tight md:leading-snug ${
+            isDarkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600' 
+                      : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-purple-600'
           }`}>
             Discover Inspiring Blogs
           </h1>
@@ -68,7 +63,7 @@ export const Blogs = () => {
         {loading ? (
           <div className="space-y-8">
             {[...Array(5)].map((_, index) => (
-              <BlogSkeleton key={index} isDarkMode={isDarkMode} />
+              <BlogSkeletons key={index} isDarkMode={isDarkMode} />
             ))}
           </div>
         ) : (
@@ -102,7 +97,7 @@ export const Blogs = () => {
 }
 
 // Enhanced BlogSkeleton component
-const BlogSkeleton = ({ isDarkMode }: { isDarkMode: boolean }) => (
+export const BlogSkeletons = ({ isDarkMode }: { isDarkMode: boolean }) => (
   <div className={`animate-pulse ${
     isDarkMode ? 'bg-gray-800 bg-opacity-60' : 'bg-white bg-opacity-60'
   } rounded-2xl shadow-md p-6 backdrop-blur-sm`}>
