@@ -87,7 +87,7 @@ const Myblogs = () => {
         return <div className={`min-h-screen transition-colors duration-300 bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800`}>
             <Appbar /> 
             <div  className="flex justify-center items-center flex-col">
-              <div className={"text-3xl md:text-5xl font-extrabold leading-tight md:leading-snug text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-600"}>
+              <div className={"text-3xl mt-4 md:text-5xl font-extrabold leading-tight md:leading-snug text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-600"}>
                   My Blogs
               </div>
                 <div className="mt-4  space-y-3 w-[400px] md:w-[800px]">

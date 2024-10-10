@@ -27,7 +27,7 @@ export const Homepage = () => {
           </div>
           <main className="container mx-auto px-4 py-16">
             <section className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl leading-tight md:leading-snug font-bold mb-4 text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-600">Welcome to BlogRAG</h1>
+              <h1 className="text-4xl md:text-5xl leading-tight md:leading-snug font-bold mb-4 text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-600">Welcome to Read-Me-Blog</h1>
               <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
                 Discover insightful articles and engage with our AI-powered chatbot for an enhanced learning experience.
               </p>
@@ -66,7 +66,7 @@ export const Homepage = () => {
             </section>
 
             <section className="mt-16 text-center">
-              <h2 className="text-2xl font-bold mb-4 leading-tight md:leading-snug  text-transparent bg-gradient-to-r bg-clip-text from-green-400 to-blue-600">Why Choose BlogRAG?</h2>
+              <h2 className="text-2xl font-bold mb-4 leading-tight md:leading-snug  text-transparent bg-gradient-to-r bg-clip-text from-green-400 to-blue-600">Why Choose Read-Me-Blog?</h2>
               <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Insightful Content</h3>
@@ -95,7 +95,7 @@ export const Homepage = () => {
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="mb-4 md:mb-0">
                   <Link to="/" className="text-xl font-bold text-purple-500">
-                    BlogRAG
+                    Read-Me-Blog
                   </Link>
                   <p className="text-sm text-gray-500 mt-1">© 2024 BlogRAG. All rights reserved.</p>
                 </div>

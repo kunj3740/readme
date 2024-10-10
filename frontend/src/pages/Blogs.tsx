@@ -13,7 +13,7 @@ export const Blogs = () => {
   const [isDarkMode, setIsDarkMode] = useState(true)
 
   useEffect(() => {
-    const results = blogs.filter((blog) =>
+    const results = blogs.filter((blog : any) =>
       blog.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
     setFilteredBlogs(results)

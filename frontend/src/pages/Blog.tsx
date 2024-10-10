@@ -14,7 +14,7 @@ export const Blog = () => {
     return <div>
     {loading || !blog ? (
         <div className="">
-            <div className="">
+            <div className="bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800">
                 <Appbar/>
                 <Skeleton isDarkMode={true}/>
             </div>
