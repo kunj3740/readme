@@ -104,14 +104,14 @@ export const Appbar = () => {
               <div className="relative">
                 <button 
                   onClick={toggleDropdown} 
-                  className="focus:outline-none mb-2"
+                  className="focus:outline-none "
                   aria-haspopup="true"
                   aria-expanded={dropdownVisible}
                 >
                   <Avatar name={username} isDarkMode={isDarkMode} />
                 </button>
                 {dropdownVisible && (
-                  <div className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
+                  <div className={`absolute  right-0 mt-2 w-48 rounded-md shadow-lg ${
                     isDarkMode ? 'bg-gray-800' : 'bg-white'
                   } ring-1 ring-black ring-opacity-5 transition-all duration-200 origin-top-right`}>
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
