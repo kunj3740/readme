@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { Signup } from './pages/Signup'
 import { Signin } from './pages/Signin'
 import { Blog } from './pages/Blog'
@@ -6,7 +6,7 @@ import { Blogs } from './pages/Blogs'
 import { Publish } from './pages/Publish'
 import Homepage from './pages/HomePage'
 import Myblogs from './pages/MyBlogs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Chatbot } from './components/ChatBot'
 import { Send } from 'lucide-react'
 
@@ -14,10 +14,16 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(true)
   const location = useLocation()
+  const [searchParams] = useSearchParams();
 
-  // Condition to hide the chatbot on certain pages
   const hideChatbotPaths = ['/', '/publish' , '/signin' , '/signup']
+  useEffect(() => {
 
+    const chatOpenParam = searchParams.get('isChatOpen');
+    if (chatOpenParam === 'true') {
+      setIsChatOpen(true);
+    }
+  }, [searchParams]);
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'

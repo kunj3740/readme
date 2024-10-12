@@ -80,7 +80,7 @@ export const Publish: React.FC = () => {
         }
       })
 
-      await axios.post(`${RAG_URL}`, {
+      await axios.post(`${RAG_URL}/embed`, {
         title,
         content
       })
@@ -88,7 +88,6 @@ export const Publish: React.FC = () => {
       toast.success('Blog Published Successfully!')
       navigate(`/blog/${response.data.id}`)
     } catch (error) {
-      toast.error('Error publishing blog!')
     } finally {
       setIsPublishing(false)
     }
@@ -98,7 +97,6 @@ export const Publish: React.FC = () => {
 
   return (
     <div className="min-h-screen transition-colors duration-300  bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800">
-      <Toaster position="top-center" />
       <Appbar />
       <div className="container mx-auto px-4 py-8">
         <div className="w-full max-w-4xl mx-auto bg-black/50 backdrop-blur-md shadow-xl rounded-lg overflow-hidden">
