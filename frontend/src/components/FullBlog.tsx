@@ -58,7 +58,7 @@ const Chatbot = ({ isOpen, setIsOpen, isDarkMode }: { isOpen: boolean; setIsOpen
         <div className="flex-grow overflow-auto p-4">
           {messages.map((message, index) => (
             <div key={index} className={`mb-4 ${message.isUser ? 'text-right' : 'text-left'}`}>
-              <span className={`inline-block p-3 rounded-lg ${
+              <span className={`inline-block p-3 whitespace-pre-wrap rounded-lg ${
                 message.isUser 
                   ? (isDarkMode ? 'bg-purple-600 text-white' : 'bg-indigo-500 text-white')
                   : (isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-gray-200 text-gray-800')
