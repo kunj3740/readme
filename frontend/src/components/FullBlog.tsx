@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Blog } from "../hooks"
 import { Appbar } from "./Appbar"
 import { Send, X, Sun, Moon } from "lucide-react"
@@ -175,11 +175,9 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
     </div>
   );
 }
-export const Skeleton = ({ isDarkMode }: ThemeProps) => {
+export const Skeleton = React.memo(({ isDarkMode }: ThemeProps) => {
   return (
-
     <div className={`animate-pulse h-screen w-screen flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-      
       <div className="mb-6 w-full max-w-screen-lg">
         <div className={`h-10 md:h-14 rounded-lg ${isDarkMode ? 'bg-purple-700' : 'bg-rose-300'}`}></div>
       </div>
@@ -200,4 +198,4 @@ export const Skeleton = ({ isDarkMode }: ThemeProps) => {
       </div>
     </div>
   );
-};
+});

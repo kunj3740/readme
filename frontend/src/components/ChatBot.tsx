@@ -58,7 +58,15 @@ export const Chatbot: React.FC<ChatbotProps> = ({
       }
     }
   };
-
+  const formatMessage = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index} className="font-bold text-lg">{part.slice(2, -2)}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -67,7 +75,7 @@ export const Chatbot: React.FC<ChatbotProps> = ({
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className={`fixed inset-y-0 right-0 w-full md:w-96 shadow-lg ${
+          className={`fixed inset-y-0 right-0 w-full md:w-[500px] shadow-lg ${
             isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'
           }`}
         >
@@ -77,7 +85,7 @@ export const Chatbot: React.FC<ChatbotProps> = ({
                 isDarkMode ? 'border-gray-700' : 'border-gray-200'
               }`}
             >
-              <h2 className="text-xl font-bold">Chatbot</h2>
+              <h2 className="text-xl text-center font-bold">Gyani AI</h2>
               <button
                 onClick={() => setIsOpen(false)}
                 className={`rounded-full p-2 transition-colors ${
@@ -107,7 +115,9 @@ export const Chatbot: React.FC<ChatbotProps> = ({
                         : 'bg-gray-200 text-gray-800'
                     }`}
                   >
-                    {message.text}
+                    <div className="whitespace-pre-wrap font-sans">
+                      {formatMessage(message.text)}
+                    </div>
                   </div>
                 </motion.div>
               ))}

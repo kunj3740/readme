@@ -37,7 +37,28 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       toast.error("Error while logging in!")
     }
   }
-
+  async function LoginAsGuest() {
+    try {
+      
+      toast.loading("Authentication in progress")
+      const response = await axios.post( `${BACKEND_URL}/api/v1/user/signin`, {
+          username: "kunj@gmail.com",
+          password: "123456",
+        }
+      );
+      if (!response) {
+        toast.error("Error while logging in!")
+      }
+      toast.dismiss()
+      toast.success("Logged In!")
+      const jwt = response.data
+      localStorage.setItem("token", jwt)
+      navigate("/blogs")
+    } catch (e) {
+      toast.dismiss()
+      toast.error("Error while logging in!")
+    }
+  }
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-purple-700 to-indigo-900">
       <motion.div
@@ -106,6 +127,14 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
             className="w-full text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-3 transition-all duration-300 ease-in-out"
           >
             {type === "signup" ? "Create Account" : "Sign In"}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={LoginAsGuest}
+            className="w-full text-indigo-600 bg-white border-2 border-indigo-600 hover:bg-indigo-50 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-3 transition-all duration-300 ease-in-out mt-4"
+          >
+            Login as Guest
           </motion.button>
         </div>
       </motion.div>
