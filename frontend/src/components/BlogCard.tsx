@@ -66,19 +66,12 @@ export function BlogCard({
 }: BlogCardProps) {
   const readTime = estimateReadTime(content)
 
-  // Set width and margin conditionally based on the browser and screen size
-  const widthStyle = isEdge ? '90%' : '80%'
-  const responsiveStyle = {
-    width: widthStyle,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  }
+  // Set width and margin conditionally based on the browser and screen siz
 
   return (
     <Link
       to={`/blog/${id}`}
-      className="block w-full md:w-[80%] lg:w-[90%]"
-      style={responsiveStyle}
+      className={`block w-full ${ isEdge ? 'w-full' : "md:w-[80%]"}  ${ isEdge ? '' : "md:ml-[10%]"}`}
     >
       <div className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 ${
         isDarkMode 

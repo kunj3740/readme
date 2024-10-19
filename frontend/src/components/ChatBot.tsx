@@ -40,7 +40,7 @@ export const Chatbot: React.FC<ChatbotProps> = ({
     e.preventDefault();
     if (inputValue.trim()) {
       const newMessages = [...messages, { text: inputValue, isUser: true }];
-      setMessages(newMessages);
+      setMessages([...newMessages, { text: 'Gyani is thinking...', isUser: false }]);
       setInputValue('');
 
       try {
@@ -51,13 +51,25 @@ export const Chatbot: React.FC<ChatbotProps> = ({
         }
 
         const botMessage = response.data.response;
-        setMessages([...newMessages, { text: botMessage, isUser: false }]);
+        setMessages([
+          ...newMessages,
+          { text: botMessage, isUser: false }
+        ]);
       } catch (error) {
         console.error('Error fetching response:', error);
-        setMessages([...newMessages, { text: 'Sorry, something went wrong.', isUser: false }]);
+        setMessages([
+          ...newMessages,
+          { text: 'Sorry, something went wrong.', isUser: false }
+        ]);
+      } finally {
+        // Remove the "Gyani is thinking..." message
+        setMessages((prevMessages) =>
+          prevMessages.filter((message) => message.text !== 'Gyani is thinking...')
+        );
       }
     }
   };
+
   const formatMessage = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, index) => {
@@ -67,6 +79,7 @@ export const Chatbot: React.FC<ChatbotProps> = ({
       return <span key={index}>{part}</span>;
     });
   };
+
   return (
     <AnimatePresence>
       {isOpen && (
