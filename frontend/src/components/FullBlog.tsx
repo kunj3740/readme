@@ -112,7 +112,7 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
   }
 
   return  (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'}`}>
       <Appbar />
       <div className="flex justify-center">
         <div className="grid grid-cols-12 px-5 w-full max-w-screen-xl pt-8">
@@ -162,16 +162,6 @@ export const FullBlog = ({ blog }: {blog: Blog}) => {
         </div>
       </div>
       <div className="h-[50px]"></div>
-      <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} isDarkMode={isDarkMode} />
-      {!isChatOpen && (
-        <button 
-          onClick={() => setIsChatOpen(true)} 
-          className={`fixed bottom-4 right-4 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-colors ${isDarkMode ? 'bg-black text-white hover:bg-purple-700' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
-        >
-          <Send className="w-6 h-6" />
-        </button>
-      )}
-      
     </div>
   );
 }

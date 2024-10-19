@@ -5,10 +5,10 @@ import { Blog } from './pages/Blog'
 import { Blogs } from './pages/Blogs'
 import { Publish } from './pages/Publish'
 import Homepage from './pages/HomePage'
-import Myblogs from './pages/MyBlogs'
 import { useEffect, useState } from 'react'
 import { Chatbot } from './components/ChatBot'
 import { Send } from 'lucide-react'
+import Myblogs from './pages/MyBlogs'
 
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
