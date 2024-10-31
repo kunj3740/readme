@@ -62,7 +62,7 @@ export const Blogs = () => {
         </div>
 
         {loading ? (
-          <div className={`space-y-8 w-full ${ isEdge ? 'w-full' : "md:w-[80%]"}  ${ isEdge ? '' : "md:ml-[10%]"}`}>
+          <div className={`space-y-8 w-full flex flex-col items-center ${ isEdge ? 'w-full' : "md:w-[80%]"}  ${ isEdge ? '' : " md:ml-[10%]"}`}>
             {[...Array(5)].map((_, index) => (
               <BlogSkeletons key={index} isDarkMode={isDarkMode} />
             ))}
