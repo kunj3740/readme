@@ -86,7 +86,7 @@ export const Publish: React.FC = () => {
       })
 
       toast.success('Blog Published Successfully!')
-      window.location.href = `/blog/${response.data.id}`;
+      navigate(`/blog/${response.data.id}`)
     } catch (error) {
     } finally {
       setIsPublishing(false)

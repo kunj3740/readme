@@ -48,7 +48,6 @@ const Myblogs = () => {
       );
       toast.success("Blog deleted successfully!");
       setDeleted(prev => [...prev, id]);
-      window.location.href = `/myblogs`;
     } catch (error) {
       toast.error("Failed to delete blog");
     }
@@ -68,7 +67,6 @@ const Myblogs = () => {
       setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
       setIsUpdating(false);
-      window.location.href = `/myblogs`;
     } catch (error) {
       toast.error("Failed to update blog");
     }
@@ -92,9 +90,9 @@ const Myblogs = () => {
     return (
       <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
         <Appbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <HeaderSection />
-          <div className="grid gap-6">
+          <div className="grid gap-6 self-center">
             <BlogSkeletons isDarkMode={true} />
             <BlogSkeletons isDarkMode={true} />
           </div>

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Appbar } from '../components/Appbar';
 import { BookOpen, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
-import { jwtDecode } from 'jwt-decode';
 
 
 export const Homepage = () => {
@@ -12,13 +11,7 @@ export const Homepage = () => {
     return localStorage.getItem('token') !== null;
   };
 
-  const handleViewMoreClick = () => {
-    navigate('/blogs');
-  };
-
-  const handleLoginClick = () => {
-    navigate('/signin');
-  };
+  
 
   return (
     
@@ -92,7 +85,6 @@ export const Homepage = () => {
               </div>
             </section>
           </main>
-
           <footer className="border-t border-gray-800 mt-16">
             <div className="container mx-auto px-4 py-6">
               <div className="flex flex-col md:flex-row justify-between items-center">
@@ -119,7 +111,9 @@ export const Homepage = () => {
               </div>
             </div>
           </footer>
+          
         </div>
+        
    
   );
 }; 
