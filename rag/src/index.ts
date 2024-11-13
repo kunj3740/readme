@@ -80,7 +80,6 @@ app.post('/question', async (c) => {
 
     const retriever = vectorStore.asRetriever();
 
-    // Generate standalone question
     const standaloneQuestionTemplate = 'Given a question, convert it to a standalone question. question: {question} standalone question:';
     const standaloneQuestionPrompt = PromptTemplate.fromTemplate(standaloneQuestionTemplate);
 
@@ -92,7 +91,7 @@ app.post('/question', async (c) => {
     //   context: {context}
     //   question: {question}
     //   answer: `;
-    const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided. Your answer should summarize or define the topic based on the context if you do not find the answer in the content than give content as per your knowledge.
+    const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided. Your answer should summarize or define the topic based on the context if you do not find the answer in the content than give content as per your knowledge.if they just greet you than reply by your own.
     context: {context}
     question: {question}
     answer: `;

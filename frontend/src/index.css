@@ -163,7 +163,7 @@
   }
   
   .bg-mesh {
-    background-image: radial-gradient(at 40% 20%, rgb(59, 17, 74) 0px, transparent 20%),
+    background-image: radial-gradient(at 40% 20%, rgb(66, 17, 83) 0px, transparent 20%),
                       radial-gradient(at 80% 0%, rgba(71, 41, 100, 0.852) 0px, transparent 50%),
                       radial-gradient(at 0% 50%, rgba(27, 13, 71, 0.537) 0px, transparent 50%);
     background-size: 100% 100%;
@@ -206,8 +206,8 @@
       45deg,
       transparent,
       transparent 1px,
-      theme('colors.violet.500') 1px,
-      theme('colors.violet.500') 2px
+      theme('colors.blue.300') 1px,
+      theme('colors.blue.300') 2px
     );
     animation: slide 10s linear infinite;
   }
