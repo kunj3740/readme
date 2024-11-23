@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { Chatbot } from './components/ChatBot'
 import { Send } from 'lucide-react'
 import Myblogs from './pages/MyBlogs'
+import GyaniAIButton from './components/ui/GyaniAIButton'
 
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -45,20 +46,9 @@ function App() {
         <Chatbot isOpen={isChatOpen} setIsOpen={setIsChatOpen} isDarkMode={isDarkMode} />
       )}
 
-      {/* Button to toggle chatbot visibility */}
       {!isChatOpen && !hideChatbotPaths.includes(location.pathname) && (
-        <button 
-          onClick={() => setIsChatOpen(true)} 
-          className={`fixed bottom-4 right-4 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-colors ${
-            isDarkMode 
-              ? 'bg-black text-white hover:bg-purple-700' 
-              : 'bg-indigo-500 text-white hover:bg-indigo-600'
-          }`}
-        >
-          <Send className="w-6 h-6" />
-        </button>
+        <GyaniAIButton setIsChatOpen={setIsChatOpen} isDarkMode={isDarkMode} />
       )}
-
       
     </div>
     
