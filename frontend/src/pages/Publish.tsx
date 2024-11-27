@@ -191,15 +191,21 @@ export const Publish: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="bg-black/30 px-6 py-4 flex justify-between items-center">
-            <GrammarCorrection 
-              onCorrect={handleCorrection}
-              isLoading={isCorrecting}
-            />
-            <Button onClick={handlePublish} disabled={isPublishing}>
-              {isPublishing ? 'Publishing...' : 'Publish Post'}
-            </Button>
-          </div>
+          <div className="bg-black/30 px-4 sm:px-6 py-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center sm:justify-between">
+                <GrammarCorrection 
+                  onCorrect={handleCorrection}
+                  isLoading={isCorrecting}
+                />
+                <Button 
+                  onClick={handlePublish} 
+                  disabled={isPublishing}
+                  className="w-full sm:w-auto"
+                >
+                  {isPublishing ? 'Publishing...' : 'Publish Post'}
+                </Button>
+              </div>
+            </div>
         </div>
       </div>
       {showConfetti && (
