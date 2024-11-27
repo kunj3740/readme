@@ -8,6 +8,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnablePassthrough, RunnableSequence } from "@langchain/core/runnables";
+import OpenAI from 'openai';
 
 const app = new Hono<{
 	Bindings: {
@@ -168,5 +169,42 @@ export function combineDocuments(docs: any) {
   }
   return docs.map((doc: any) => doc.pageContent).join('\n\n');
 }
+
+
+
+app.post('/grammar-correction', async (c) => {
+  const openai = new OpenAI({
+    apiKey: c.env.OPENAI_API_KEY, // Use your environment variable for the API key
+  });
+  try {
+    const { text } = await c.req.json(); // Parse JSON body
+
+    if (!text) {
+      return c.json({ error: 'Text is required for grammar correction.' }, 400);
+    }
+
+    // Call OpenAI API for grammar correction
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo', // You can use 'gpt-4' if needed
+      messages: [
+        {
+          role: 'user',
+          content: `Correct the spelling and grammar  send the output directly without double quote of the following text:\n\n"${text}"`,
+        },
+      ],
+    });
+
+    const correctedText = response.choices[0]?.message?.content?.trim();
+
+    if (!correctedText) {
+      return c.json({ error: 'Failed to generate corrected text.' }, 500);
+    }
+
+    return c.json({ correctedText }); // Return the corrected text
+  } catch (error) {
+    console.error('Error correcting text:', error);
+    return c.json({ error: 'Failed to process your request.' }, 500);
+  }
+});
 
 export default app;

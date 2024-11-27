@@ -1,11 +1,12 @@
-'use client'
-
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
 import { BACKEND_URL, RAG_URL } from '../config'
 import { Appbar } from '../components/Appbar'
+import { GrammarCorrection } from '../components/ui/GrammarCorrection'
+import { motion, AnimatePresence } from 'framer-motion'
+import Confetti from 'react-confetti'
 
 // Grammar correction function (using OpenAI as an example)
 const correctText = async (text: string) => {
@@ -37,7 +38,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant
 }) => {
   const baseStyle = 'px-4 py-2 rounded-md font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
   const variantStyle = variant === 'primary' 
-    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700' 
+    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-black hover:from-purple-700 hover:to-blue-700' 
     : 'border border-purple-500 text-purple-500 hover:bg-purple-100'
 
   return (
@@ -68,19 +69,21 @@ const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({
 }
 
 export const Publish: React.FC = () => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [isPublishing, setIsPublishing] = useState(false)
-  const [isCorrecting, setIsCorrecting] = useState(false)
-  const navigate = useNavigate()
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isCorrecting, setIsCorrecting] = useState(false);
+  const [showCorrectionEffect, setShowCorrectionEffect] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const navigate = useNavigate();
 
   const handlePublish = useCallback(async () => {
     if (!title.trim() || !content.trim()) {
-      toast.error('Please fill in both title and content')
-      return
+      toast.error('Please fill in both title and content');
+      return;
     }
 
-    setIsPublishing(true)
+    setIsPublishing(true);
     try {
       const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
         title,
@@ -89,42 +92,61 @@ export const Publish: React.FC = () => {
         headers: {
           Authorization: localStorage.getItem('token'),
         }
-      })
+      });
 
       await axios.post(`${RAG_URL}/embed`, {
         title,
         content,
-      })
-
-      toast.success('Blog Published Successfully!')
-      navigate(`/blog/${response.data.id}`)
+      });
+      toast.success('Blog Published Successfully!');
+      navigate(`/blog/${response.data.id}`);
     } catch (error) {
-      console.error('Error publishing blog:', error)
-      toast.error('Failed to publish blog')
+      console.error('Error publishing blog:', error);
+      toast.error('Failed to publish blog');
     } finally {
-      setIsPublishing(false)
+      setIsPublishing(false);
     }
-  }, [title, content, navigate])
+  }, [title, content, navigate]);
 
   const handleCorrection = useCallback(async () => {
     if (!content.trim()) {
-      toast.error('Please write some content to correct')
-      return
+      toast.error('Please write some content to correct');
+      return;
     }
 
-    setIsCorrecting(true)
+    setIsCorrecting(true);
     try {
-      const correctedText = await correctText(content)
-      setContent(correctedText)
-      toast.success('Content corrected successfully!')
+      const correctedText = await correctText(content);
+      setContent(correctedText);
+      setShowCorrectionEffect(true);
+      setShowConfetti(true);
+      toast.success('Content corrected successfully!');
     } catch (error) {
-      console.error('Error correcting content:', error)
+      console.error('Error correcting content:', error);
     } finally {
-      setIsCorrecting(false)
+      setIsCorrecting(false);
     }
-  }, [content])
+  }, [content]);
 
-  const wordCount = content.trim().split(/\s+/).length
+  useEffect(() => {
+    if (showCorrectionEffect) {
+      const timer = setTimeout(() => {
+        setShowCorrectionEffect(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showCorrectionEffect]);
+
+  useEffect(() => {
+    if (showConfetti) {
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showConfetti]);
+
+  const wordCount = content.trim().split(/\s+/).length;
 
   return (
     <div className="min-h-screen transition-colors duration-300 bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800">
@@ -143,12 +165,24 @@ export const Publish: React.FC = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="text-xl font-bold"
               />
-              <div className="space-y-2">
+              <div className="relative">
+                <AnimatePresence>
+                  {showCorrectionEffect && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute inset-0 bg-green-500/20 rounded-md pointer-events-none"
+                    />
+                  )}
+                </AnimatePresence>
                 <Textarea
                   placeholder="Write your blog content here..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={10}
+                  className={`transition-all duration-300 ${showCorrectionEffect ? 'ring-2 ring-green-500' : ''}`}
                 />
               </div>
               <div className="flex justify-between items-center text-sm text-purple-300">
@@ -158,15 +192,26 @@ export const Publish: React.FC = () => {
             </div>
           </div>
           <div className="bg-black/30 px-6 py-4 flex justify-between items-center">
-            <Button onClick={handleCorrection} disabled={isCorrecting}>
-              {isCorrecting ? 'Correcting...' : 'Check and Correct'}
-            </Button>
+            <GrammarCorrection 
+              onCorrect={handleCorrection}
+              isLoading={isCorrecting}
+            />
             <Button onClick={handlePublish} disabled={isPublishing}>
               {isPublishing ? 'Publishing...' : 'Publish Post'}
             </Button>
           </div>
         </div>
       </div>
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={200}
+          gravity={0.2}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
+

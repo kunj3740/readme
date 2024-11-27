@@ -267,3 +267,19 @@ blogRouter.post('/updateBlog', async (c) => {
         }, { status: 500 });
     }
 });
+blogRouter.post('/grammar-correction', async (c) => {
+    const { text } = await c.req.json(); // Parse JSON body
+  
+    if (!text) {
+      return c.json({ error: 'Text is required for grammar correction.' }, 400); // Proper Hono response for error
+    }
+  
+    try {
+      // Simulate grammar correction
+      const correctedText = `${text} (corrected)`;
+      return c.json({ correctedText }); // Send the corrected text
+    } catch (error) {
+      console.error('Error correcting text:', error);
+      return c.json({ error: 'Failed to correct text.' }, 500); // Handle error gracefully
+    }
+});
