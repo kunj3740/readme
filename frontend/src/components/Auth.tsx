@@ -167,10 +167,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              <span className="px-2 bg-white text-gray-800">Or continue with</span>
             </div>
           </div>
-          <div className="mt-6">
+          <div className="mt-6 border-2 border-purple-600 rounded-md shadow-lg">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleError}
