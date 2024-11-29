@@ -44,17 +44,26 @@ const fetcher = (url: string) => axios.get(url, {
   }).then(response => response.data);
   
 export const useBlogs = () => {
-const { data, error } = useSWR(`${BACKEND_URL}/api/v1/blog/bulk`, fetcher, {
-    revalidateOnFocus: false,  
-    dedupingInterval: 60000,   
-});
+    const [loading, setLoading] = useState(true);
+    const [blogs, setBlogs] = useState<Blog[]>([]);
 
-return {
-    loading: !data && !error,  
-    blogs: data?.blogs || [],  
-    error                      
-};
-};
+    useEffect(() => {
+        axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+            .then(response => {
+                setBlogs(response.data.blogs);
+                setLoading(false);
+            })
+    }, [])
+
+    return {
+        loading,
+        blogs
+    }
+}
 export const useUserBlogs = () => {
     const [loading, setLoading] = useState(true);
     const [blogs, setBlogs] = useState<Blog[]>([]);

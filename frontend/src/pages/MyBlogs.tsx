@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Pencil, Trash2, Clock, ChevronRight, BookOpen } from "lucide-react";
 import { BlogSkeletons } from "./Blogs";
+import { jwtDecode } from "jwt-decode";
 
 const formatDate = (date: string | Date): string => {
   const dateObj = (typeof date === "string") ? new Date(date) : date;
@@ -17,7 +18,10 @@ const formatDate = (date: string | Date): string => {
   };
   return dateObj.toLocaleDateString('en-GB', options);
 };
-
+interface CustomJwtPayload {
+  username: string; // Adjust based on your JWT payload structure
+  // Add other fields from your JWT payload if needed
+}
 const Myblogs = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -25,17 +29,44 @@ const Myblogs = () => {
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
+
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/blog/userid`, {
-      headers: {
-        Authorization: localStorage.getItem("token")
-      }
-    })
-      .then(response => {
+    const fetchBlogs = async () => {
+      const token = localStorage.getItem("token") || "";
+      let backendCall;
+  
+      try {
+        // Step 1: Decode the JWT token
+        const decodedToken = jwtDecode<CustomJwtPayload>(token);
+  
+        // Step 2: Extract the username (email)
+        const username = decodedToken.username || ""; // Assuming the token payload has a 'username' field
+  
+        // Step 3: Check if the email contains '@admin'
+        if (username.includes("@admin")) {
+          backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
+        } else {
+          backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
+        }
+  
+        // Step 4: Make the API call
+        const response = await axios.get(backendCall, {
+          headers: {
+            Authorization: token
+          }
+        });
+  
         setBlogs(response.data.blogs);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+  
+    fetchBlogs();
   }, []);
+  
 
   const deleteHandler = async (id: number) => {
     try {
