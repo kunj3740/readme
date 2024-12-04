@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import toast from 'react-hot-toast';
 import { PenSquare, User, LogOut, Sun, Moon } from 'lucide-react';
+import useContextedBlogs from '../context/theme';
+import { Blog } from '../hooks';
 
 interface MyToken {
   name: string;
@@ -29,6 +31,8 @@ export const Appbar = () => {
   const [username, setUsername] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();
+  const [fetchedBlogs, setFetchedBlogs] = useState<Blog[]>([]); // Local state for blogs
+  const { blogs, getBlogs } = useContextedBlogs();
 
   useEffect(() => {
     const getUser = () => {
@@ -54,6 +58,13 @@ export const Appbar = () => {
     // Save theme preference
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
+
+  useEffect(() => {
+    // Fetch blogs using the context's getBlogs method
+    const blogs = getBlogs();
+    setFetchedBlogs(blogs);
+     
+  }, [getBlogs]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);

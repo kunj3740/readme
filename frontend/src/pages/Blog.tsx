@@ -10,9 +10,6 @@ export const Blog = () => {
 
   return (
     <div>
-      <div className="">
-        <Appbar />
-      </div>
         
         <FullBlog id={id!}/>
       

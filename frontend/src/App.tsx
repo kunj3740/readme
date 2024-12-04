@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { Signup } from './pages/Signup'
 import { Signin } from './pages/Signin'
 import { Blog } from './pages/Blog'
@@ -7,17 +7,45 @@ import { Publish } from './pages/Publish'
 import Homepage from './pages/HomePage'
 import { useEffect, useState } from 'react'
 import { Chatbot } from './components/ChatBot'
-import { Send } from 'lucide-react'
 import Myblogs from './pages/MyBlogs'
 import GyaniAIButton from './components/ui/GyaniAIButton'
-
+import { Appbar } from './components/Appbar'
+import { BlogProvider } from './context/theme'
+import axios from 'axios'
+import { BACKEND_URL } from './config'
+interface Blog {
+  content: string;
+  title: string;
+  id: number;
+  publishedDate: Date;
+  author: {
+      name: string;
+  };
+}
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(true)
   const location = useLocation()
   const [searchParams] = useSearchParams();
+  const [ blogs , setBlogs ] = useState<Blog[]>([]);
 
+  const AppbarPaths = ['/signin' , '/signup']
+  const homePageAppbarPath = ['/']
   const hideChatbotPaths = ['/', '/publish' , '/signin' , '/signup']
+
+  const getBlogs = () => {
+    axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+      headers: {
+          Authorization: localStorage.getItem("token")
+      }
+  })
+      .then(response => {
+          setBlogs(response.data.blogs);
+      })
+    return blogs;
+  }
+
+  
   useEffect(() => {
 
     const chatOpenParam = searchParams.get('isChatOpen');
@@ -26,6 +54,17 @@ function App() {
     }
   }, [searchParams]);
   return (
+    <BlogProvider value={{ blogs , getBlogs }}>
+      
+      {!AppbarPaths.includes(location.pathname) && (
+        <div
+        className={`backdrop-blur-sm bg-black/40 border-b border-white/5 z-20 ${
+          location.pathname == "/" ? 'relative' : ''
+          }`}
+        >
+          <Appbar />
+        </div>
+      )}
     <div className={`min-h-screen transition-colors duration-300 ${
       isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'
     }`}>
@@ -51,7 +90,7 @@ function App() {
       )}
       
     </div>
-    
+    </BlogProvider>
   )
 }
 

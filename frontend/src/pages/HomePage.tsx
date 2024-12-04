@@ -10,9 +10,7 @@ export const Homepage = () => {
     <div className="min-h-screen bg-[#0a0a0f] text-gray-100 overflow-hidden">
       <div className="bg-mesh relative">
         <div className="bg-lines" />
-        <div className=" backdrop-blur-sm bg-black/40 border-b border-white/5 relative z-20">
-          <Appbar />
-        </div>
+        
         
         <main className="container mx-auto px-4 py-16 relative z-10">
           {/* Hero Section */}

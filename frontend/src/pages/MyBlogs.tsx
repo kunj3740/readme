@@ -105,7 +105,7 @@ const Myblogs = () => {
 
   const HeaderSection = () => (
     <div className="relative mb-16">
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-3xl transform -skew-y-6"></div>
+      <div className="absolute bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-3xl transform -skew-y-6"></div>
       <div className="relative flex flex-col items-center">
         <div className="flex ">
           <h1 className="text-3xl md:text-5xl eading-tight md:leading-snug font-extrabold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-orange-400">
@@ -120,7 +120,6 @@ const Myblogs = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
-        <Appbar />
         <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <HeaderSection />
           <div className="grid gap-6 self-center">
@@ -134,7 +133,6 @@ const Myblogs = () => {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
-      <Appbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <HeaderSection />
         

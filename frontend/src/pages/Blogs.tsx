@@ -5,9 +5,12 @@ import { Appbar } from "../components/Appbar"
 import { BlogCard } from "../components/BlogCard"
 import { Blog, useBlogs } from "../hooks"
 import { Search, BookOpen, Sun, Moon } from "lucide-react"
+import useContextedBlogs from "../context/theme"
 
 export const Blogs = () => {
-  const { loading, blogs } = useBlogs()
+  // const { loading, blogs } = useBlogs()
+  const { blogs, getBlogs } = useContextedBlogs();
+
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
@@ -32,7 +35,6 @@ export const Blogs = () => {
     <div className={`min-h-screen transition-colors duration-300 ${
       isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'
     }`}>
-      <Appbar />
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto mb-10 text-center relative">
           
@@ -61,13 +63,13 @@ export const Blogs = () => {
           </div>
         </div>
 
-        {loading ? (
+        {/* {loading ? (
           <div className={`space-y-8 w-full flex flex-col items-center ${ isEdge ? 'w-full' : "md:w-[80%]"}  ${ isEdge ? '' : " md:ml-[10%]"}`}>
             {[...Array(5)].map((_, index) => (
               <BlogSkeletons key={index} isDarkMode={isDarkMode} />
             ))}
           </div>
-        ) : (
+        ) : ( */}
           <div className="space-y-8 ">
             {filteredBlogs.length > 0 ? (
               filteredBlogs.map((blog) => (
@@ -91,7 +93,7 @@ export const Blogs = () => {
               </div>
             )}
           </div>
-        )}
+        {/* )} */}
       </main>
     </div>
   )
