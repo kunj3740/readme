@@ -64,7 +64,7 @@ export const Appbar = () => {
     const blogs = getBlogs();
     setFetchedBlogs(blogs);
 
-  }, []);
+  }, [getBlogs]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);

@@ -99,7 +99,7 @@ export const Publish: React.FC = () => {
         title,
         content,
       });
-      setLoading(false);
+      setLoading(!loading);
       toast.success('Blog Published Successfully!');
       // window.location.href = `/blog/${response.data.id}`
       navigate(`/blog/${response.data.id}?Published=true`);

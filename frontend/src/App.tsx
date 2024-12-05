@@ -53,7 +53,7 @@ function App() {
         setBlogs(response.data.blogs);
       });
       return blogs;
-  }, [loading , setLoading]);
+  }, [loading]);
 
   
   useEffect(() => {
