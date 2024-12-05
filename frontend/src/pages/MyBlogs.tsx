@@ -26,6 +26,7 @@ interface CustomJwtPayload {
 }
 const Myblogs = () => {
   //const [loading, setLoading] = useState(true);
+  const[ isloading , setISloading ] = useState(false);
   const { blogs , loading , setLoading  } = useContextedBlogs();
   const [blogForLocalState, setBlogs] = useState<Blog[]>([]);
   const [deleted, setDeleted] = useState<number[]>([]);
@@ -51,21 +52,25 @@ const Myblogs = () => {
           setBlogs(blogs);
           backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
         } else {
-          const FilteredAsUserBlog = blogs.filter( (blog) => 
-          {
-            blog.authorId.toString() === userID.toString()
-            console.log(userID.toString())
-          } );
-          setBlogs(FilteredAsUserBlog)
+          // const FilteredAsUserBlog = blogs.filter( (blog) => 
+          // {
+          //   blog.authorId.toString() === userID.toString()
+          //   console.log(userID.toString())
+          // } );
+          // setBlogs(FilteredAsUserBlog)
+          setISloading(true);
           backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
+          // Step 4: Make the API call
+            const response = await axios.get(backendCall, {
+              headers: {
+                Authorization: token
+              }
+            });
+            setBlogs(response.data.blogs);
+            setISloading(false);    
         }
         
-        // Step 4: Make the API call
-        // const response = await axios.get(backendCall, {
-        //   headers: {
-        //     Authorization: token
-        //   }
-        // });
+        
         
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -129,19 +134,19 @@ const Myblogs = () => {
     </div>
   );
 
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
-  //       <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  //         <HeaderSection />
-  //         <div className="grid gap-6 self-center">
-  //           <BlogSkeletons isDarkMode={true} />
-  //           <BlogSkeletons isDarkMode={true} />
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (isloading) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
+        <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <HeaderSection />
+          <div className="grid gap-6 self-center">
+            <BlogSkeletons isDarkMode={true} />
+            <BlogSkeletons isDarkMode={true} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
