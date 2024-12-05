@@ -7,6 +7,7 @@ import { Appbar } from '../components/Appbar'
 import { GrammarCorrection } from '../components/ui/GrammarCorrection'
 import { motion, AnimatePresence } from 'framer-motion'
 import Confetti from 'react-confetti'
+import useContextedBlogs from '../context/theme'
 
 // Grammar correction function (using OpenAI as an example)
 const correctText = async (text: string) => {
@@ -76,7 +77,7 @@ export const Publish: React.FC = () => {
   const [showCorrectionEffect, setShowCorrectionEffect] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const navigate = useNavigate();
-
+  const { setLoading , loading } = useContextedBlogs();
   const handlePublish = useCallback(async () => {
     if (!title.trim() || !content.trim()) {
       toast.error('Please fill in both title and content');
@@ -98,8 +99,10 @@ export const Publish: React.FC = () => {
         title,
         content,
       });
+      setLoading(false);
       toast.success('Blog Published Successfully!');
-      navigate(`/blog/${response.data.id}`);
+      // window.location.href = `/blog/${response.data.id}`
+      navigate(`/blog/${response.data.id}?Published=true`);
     } catch (error) {
       console.error('Error publishing blog:', error);
       toast.error('Failed to publish blog');

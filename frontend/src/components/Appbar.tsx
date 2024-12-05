@@ -32,8 +32,8 @@ export const Appbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();
   const [fetchedBlogs, setFetchedBlogs] = useState<Blog[]>([]); // Local state for blogs
-  const { blogs, getBlogs } = useContextedBlogs();
-
+  const { blogs, getBlogs  , setLoading , getLoading } = useContextedBlogs();
+  const [ loading , setLoadings ] = useState<boolean>(getLoading());
   useEffect(() => {
     const getUser = () => {
       const token = localStorage.getItem('token');
@@ -63,7 +63,7 @@ export const Appbar = () => {
     // Fetch blogs using the context's getBlogs method
     const blogs = getBlogs();
     setFetchedBlogs(blogs);
-     
+
   }, [getBlogs]);
 
   const toggleDropdown = () => {

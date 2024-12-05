@@ -12,6 +12,7 @@ export interface Blog {
     author: {
         name: string;
     };
+    authorId:string;
 }
 
 export const useBlog = ({ id }: { id: string }) => {

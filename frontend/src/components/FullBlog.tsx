@@ -4,6 +4,7 @@ import { Appbar } from "./Appbar"
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import useContextedBlogs from '../context/theme'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 interface ThemeProps {
   isDarkMode: boolean;
@@ -37,21 +38,27 @@ export const FullBlog = ({ id }: { id: string }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [blog, setBlog] = useState<Blog | null>(null);
   const {blogs , getBlogs} = useContextedBlogs();
-
+  const [searchParams] = useSearchParams();
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         setIsLoading(true);
-        const matchedBlog = blogs.find(blog => blog.id.toString() === id);
-        // const token = localStorage.getItem("token");
-        // if (!token) {
-        //   throw new Error("Authorization token not found");
-        // }
-        // const response = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
-        //   headers: { Authorization: token },
-        // });
-        if( matchedBlog )
-          setBlog(matchedBlog);
+        console.log(searchParams.get('Published'));
+        if( searchParams.get('Published') ){
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Authorization token not found");
+          }
+          const response = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+            headers: { Authorization: token },
+          });
+          setBlog(response.data.blog)
+        }else{
+          const matchedBlog = blogs.find(blog => blog.id.toString() === id);
+          if( matchedBlog )
+            setBlog(matchedBlog);
+        }
+        
       } catch (error) {
         console.error("Failed to fetch blog:", error);
       } finally {
@@ -60,7 +67,7 @@ export const FullBlog = ({ id }: { id: string }) => {
     };
 
     fetchBlog();
-  }, [getBlogs]);
+  }, []);
 
   
 

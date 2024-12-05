@@ -5,7 +5,7 @@ import { Blog } from './pages/Blog'
 import { Blogs } from './pages/Blogs'
 import { Publish } from './pages/Publish'
 import Homepage from './pages/HomePage'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Chatbot } from './components/ChatBot'
 import Myblogs from './pages/MyBlogs'
 import GyaniAIButton from './components/ui/GyaniAIButton'
@@ -21,6 +21,7 @@ interface Blog {
   author: {
       name: string;
   };
+  authorId:string;
 }
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -28,22 +29,31 @@ function App() {
   const location = useLocation()
   const [searchParams] = useSearchParams();
   const [ blogs , setBlogs ] = useState<Blog[]>([]);
+  const [ loading , setLoadings ] = useState<boolean>(true);
+
 
   const AppbarPaths = ['/signin' , '/signup']
-  const homePageAppbarPath = ['/']
   const hideChatbotPaths = ['/', '/publish' , '/signin' , '/signup']
 
-  const getBlogs = () => {
-    axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
-      headers: {
-          Authorization: localStorage.getItem("token")
-      }
-  })
-      .then(response => {
-          setBlogs(response.data.blogs);
-      })
-    return blogs;
+  const setLoading = (flag : boolean) => {
+    setLoadings(flag);
   }
+  
+  const getLoading = () => {
+    setLoading(loading);
+    return loading;
+  }
+  const getBlogs = useCallback(() => {
+    axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setBlogs(response.data.blogs);
+      });
+      return blogs;
+  }, [loading]);
 
   
   useEffect(() => {
@@ -52,9 +62,10 @@ function App() {
     if (chatOpenParam === 'true') {
       setIsChatOpen(true);
     }
+    
   }, [searchParams]);
   return (
-    <BlogProvider value={{ blogs , getBlogs }}>
+    <BlogProvider value={{ blogs , getBlogs , setLoading , getLoading , loading }}>
       
       {!AppbarPaths.includes(location.pathname) && (
         <div

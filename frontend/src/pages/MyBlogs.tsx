@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Pencil, Trash2, Clock, ChevronRight, BookOpen } from "lucide-react";
 import { BlogSkeletons } from "./Blogs";
 import { jwtDecode } from "jwt-decode";
+import useContextedBlogs from "../context/theme";
 
 const formatDate = (date: string | Date): string => {
   const dateObj = (typeof date === "string") ? new Date(date) : date;
@@ -19,17 +20,19 @@ const formatDate = (date: string | Date): string => {
   return dateObj.toLocaleDateString('en-GB', options);
 };
 interface CustomJwtPayload {
-  username: string; // Adjust based on your JWT payload structure
-  // Add other fields from your JWT payload if needed
+  id: string,
+  name : string,
+  username : string// Add other fields from your JWT payload if needed
 }
 const Myblogs = () => {
-  const [loading, setLoading] = useState(true);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  //const [loading, setLoading] = useState(true);
+  const { blogs , loading , setLoading  } = useContextedBlogs();
+  const [blogForLocalState, setBlogs] = useState<Blog[]>([]);
   const [deleted, setDeleted] = useState<number[]>([]);
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
-
-
+  const [isAdmin , setIsAdmin] = useState<boolean>(false);
+  const [ userID , setUserID ] = useState<string>("");
   useEffect(() => {
     const fetchBlogs = async () => {
       const token = localStorage.getItem("token") || "";
@@ -38,29 +41,36 @@ const Myblogs = () => {
       try {
         // Step 1: Decode the JWT token
         const decodedToken = jwtDecode<CustomJwtPayload>(token);
-  
+        setUserID(decodedToken.id);
+        console.log(userID)
         // Step 2: Extract the username (email)
         const username = decodedToken.username || ""; // Assuming the token payload has a 'username' field
-  
         // Step 3: Check if the email contains '@admin'
         if (username.includes("@admin")) {
+          setIsAdmin(true);
+          setBlogs(blogs);
           backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
         } else {
+          const FilteredAsUserBlog = blogs.filter( (blog) => 
+          {
+            blog.authorId.toString() === userID.toString()
+            console.log(userID.toString())
+          } );
+          setBlogs(FilteredAsUserBlog)
           backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
         }
-  
+        
         // Step 4: Make the API call
-        const response = await axios.get(backendCall, {
-          headers: {
-            Authorization: token
-          }
-        });
-  
-        setBlogs(response.data.blogs);
+        // const response = await axios.get(backendCall, {
+        //   headers: {
+        //     Authorization: token
+        //   }
+        // });
+        
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
-        setLoading(false);
+        setLoading(!loading);
       }
     };
   
@@ -78,6 +88,7 @@ const Myblogs = () => {
         { headers: { Authorization: token } }
       );
       toast.success("Blog deleted successfully!");
+      setLoading(!loading);
       setDeleted(prev => [...prev, id]);
     } catch (error) {
       toast.error("Failed to delete blog");
@@ -98,6 +109,7 @@ const Myblogs = () => {
       setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
       setIsUpdating(false);
+      setLoading(false);
     } catch (error) {
       toast.error("Failed to update blog");
     }
@@ -117,19 +129,19 @@ const Myblogs = () => {
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
-        <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <HeaderSection />
-          <div className="grid gap-6 self-center">
-            <BlogSkeletons isDarkMode={true} />
-            <BlogSkeletons isDarkMode={true} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
+  //       <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  //         <HeaderSection />
+  //         <div className="grid gap-6 self-center">
+  //           <BlogSkeletons isDarkMode={true} />
+  //           <BlogSkeletons isDarkMode={true} />
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
@@ -137,9 +149,9 @@ const Myblogs = () => {
         <HeaderSection />
         
         <div className="grid gap-6">
-          {blogs
-            .filter(blog => !deleted.includes(blog.id))
-            .map(blog => (
+          {blogForLocalState
+            .filter(blog => !deleted.includes(blog.id)  )
+            .map(blog => ( 
               <div key={blog.id} 
                 className="bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] border border-purple-500/20 hover:border-pink-500/30 shadow-lg hover:shadow-purple-500/10">
                 <div className="p-6">

@@ -112,6 +112,7 @@ blogRouter.get('/bulk', async(c) => {
                     name:true
                 }
             },
+            authorId : true,
             publishedDate : true
         }
     });
@@ -131,10 +132,12 @@ blogRouter.get('/userid', async(c) => {
         const user = await verify(token,c.env.JWT_SECRET);
     
         const userId = user.id;
-    
+        if( !userId ){
+            return c.status(500);
+        }
         const blogs = await prisma.blog.findMany({
           where: {
-            authorId: userId,
+            authorId: userId ,
           },
           select: {
             content: true,
@@ -146,7 +149,8 @@ blogRouter.get('/userid', async(c) => {
               },
             },
             publishedDate : true
-          },
+             
+           },
         });
     
         return c.json({
