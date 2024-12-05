@@ -9,6 +9,7 @@ import { Pencil, Trash2, Clock, ChevronRight, BookOpen } from "lucide-react";
 import { BlogSkeletons } from "./Blogs";
 import { jwtDecode } from "jwt-decode";
 import useContextedBlogs from "../context/theme";
+import { log } from "console";
 
 const formatDate = (date: string | Date): string => {
   const dateObj = (typeof date === "string") ? new Date(date) : date;
@@ -20,12 +21,12 @@ const formatDate = (date: string | Date): string => {
   return dateObj.toLocaleDateString('en-GB', options);
 };
 interface CustomJwtPayload {
-  id: string,
+  id: number,
   name : string,
   username : string// Add other fields from your JWT payload if needed
 }
 const Myblogs = () => {
-  //const [loading, setLoading] = useState(true);
+  const [Isloading, setIsLoading] = useState(true);
   const { blogs , loading , setLoading  } = useContextedBlogs();
   const [blogForLocalState, setBlogs] = useState<Blog[]>([]);
   const [deleted, setDeleted] = useState<number[]>([]);
@@ -40,8 +41,9 @@ const Myblogs = () => {
   
       try {
         // Step 1: Decode the JWT token
+
         const decodedToken = jwtDecode<CustomJwtPayload>(token);
-        setUserID(decodedToken.id);
+        setUserID(decodedToken.id.toString());
         console.log(userID)
         // Step 2: Extract the username (email)
         const username = decodedToken.username || ""; // Assuming the token payload has a 'username' field
@@ -52,14 +54,13 @@ const Myblogs = () => {
           backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
         } else {
           const FilteredAsUserBlog = blogs.filter( (blog) => 
-          {
-            blog.authorId.toString() === userID.toString()
-            console.log(userID.toString())
-          } );
+            {
+              return blog.authorId.toString() === userID
+            });
           setBlogs(FilteredAsUserBlog)
           backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
         }
-        
+        setIsLoading(false);
         // Step 4: Make the API call
         // const response = await axios.get(backendCall, {
         //   headers: {
@@ -70,15 +71,16 @@ const Myblogs = () => {
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
-        setLoading(!loading);
+        
       }
     };
   
     fetchBlogs();
-  }, []);
+  }, [Isloading]);
   
 
   const deleteHandler = async (id: number) => {
+    console.log(id)
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error('User not authenticated');
@@ -88,10 +90,11 @@ const Myblogs = () => {
         { headers: { Authorization: token } }
       );
       toast.success("Blog deleted successfully!");
-      setLoading(!loading);
       setDeleted(prev => [...prev, id]);
     } catch (error) {
       toast.error("Failed to delete blog");
+    }finally{
+      setLoading(!loading);
     }
   };
 
@@ -109,7 +112,7 @@ const Myblogs = () => {
       setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
       setIsUpdating(false);
-      setLoading(false);
+      setLoading(!loading);
     } catch (error) {
       toast.error("Failed to update blog");
     }
@@ -129,19 +132,19 @@ const Myblogs = () => {
     </div>
   );
 
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
-  //       <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  //         <HeaderSection />
-  //         <div className="grid gap-6 self-center">
-  //           <BlogSkeletons isDarkMode={true} />
-  //           <BlogSkeletons isDarkMode={true} />
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (Isloading) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
+        <div className="   max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <HeaderSection />
+          <div className="grid gap-6 self-center">
+            <BlogSkeletons isDarkMode={true} />
+            <BlogSkeletons isDarkMode={true} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-purple-900 to-violet-950">
