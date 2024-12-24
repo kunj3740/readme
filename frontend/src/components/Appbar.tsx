@@ -93,7 +93,7 @@ export const Appbar = () => {
         <Link to="/blogs" className={`text-xl font-semibold items-center ${isEdge ? 'ml-3' : 'ml-[5%]' } flex`}>
           <div className='h-[30px] mr-2'>
             <img className='rounded h-[30px]' src="../images/articlenew.jpg" alt="Read-Me Logo" />
-          </div>
+          </div> 
           <div className={`text-2xl font-bold ${isDarkMode ? 'text-purple-300' : 'text-indigo-600'}`}>
             Read-Me
           </div>

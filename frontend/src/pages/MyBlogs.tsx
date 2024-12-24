@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Appbar } from "../components/Appbar";
 import { Blog } from '../hooks';
 import { BACKEND_URL } from "../config";
@@ -34,53 +34,65 @@ const Myblogs = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdmin , setIsAdmin] = useState<boolean>(false);
   const [ userID , setUserID ] = useState<string>("");
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const token = localStorage.getItem("token") || "";
-      let backendCall;
+  const [ flag , setFlag ] = useState<boolean>(false);
+  const[updated , setUpdated] = useState<boolean>(false);
+  const fetchBlogs = useCallback(async () => {
+    const token = localStorage.getItem("token") || "";
+    let backendCall;
   
-      try {
-        // Step 1: Decode the JWT token
-        const decodedToken = jwtDecode<CustomJwtPayload>(token);
-        setUserID(decodedToken.id);
-        console.log(userID)
-        // Step 2: Extract the username (email)
-        const username = decodedToken.username || ""; // Assuming the token payload has a 'username' field
-        // Step 3: Check if the email contains '@admin'
-        if (username.includes("@admin")) {
-          setIsAdmin(true);
-          setBlogs(blogs);
-          backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
-        } else {
-          // const FilteredAsUserBlog = blogs.filter( (blog) => 
-          // {
-          //   blog.authorId.toString() === userID.toString()
-          //   console.log(userID.toString())
-          // } );
-          // setBlogs(FilteredAsUserBlog)
-          setISloading(true);
+    try {
+      // Step 1: Decode the JWT token
+      const decodedToken = jwtDecode<CustomJwtPayload>(token);
+      setUserID(decodedToken.id);
+      console.log(userID);
+      // Step 2: Extract the username (email)
+      const username = decodedToken.username || ""; // Assuming the token payload has a 'username' field
+      // Step 3: Check if the email contains '@admin'
+      if (username.includes("@admin")) {
+        setIsAdmin(true);
+        setBlogs(blogs);
+        backendCall = `${BACKEND_URL}/api/v1/blog/bulk`;
+      } else {
+        setISloading(true);
+        if( flag == false ){
+          setFlag( true );
+        } 
+        if( updated === true ){
           backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
           // Step 4: Make the API call
-            const response = await axios.get(backendCall, {
-              headers: {
-                Authorization: token
-              }
-            });
-            setBlogs(response.data.blogs);
-            setISloading(false);    
+          const response = await axios.get(backendCall, {
+            headers: {
+              Authorization: token
+            }
+          });
+          setBlogs(response.data.blogs);
+          setISloading(false);
+          setUpdated(false);
+        }else{
+          const FilteredAsUserBlog = blogs.filter((blog) => {
+            if (blog.authorId.toString() === userID.toString()) {
+              console.log(blog.authorId.toString() + " is my userID");
+              return true; // Include this blog in the filtered array
+            }
+            return false; // Exclude this blog from the filtered array
+          });
+          console.log(FilteredAsUserBlog);
+    
+          setBlogs(FilteredAsUserBlog);
+          setISloading(false);
         }
-        
-        
-        
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      } finally {
-        setLoading(!loading);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    } finally {
+      setLoading(!loading);
+    }
+  }, [flag , loading]);
   
+  useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [flag , loading ]);
+  
   
 
   const deleteHandler = async (id: number) => {
@@ -109,7 +121,7 @@ const Myblogs = () => {
         editBlog, 
         { headers: { Authorization: localStorage.getItem("token") } }
       );
-      
+      setUpdated(true);
       toast.success("Blog updated successfully!");
       setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
