@@ -71,6 +71,7 @@ const Myblogs = () => {
           setBlogs(response.data.blogs);
           setISloading(false);
           setUpdated(false);
+          setLoading(!loading)
         }else{
           const FilteredAsUserBlog = blogs.filter((blog) => {
             if (blog.authorId.toString() === userID.toString()) {
@@ -94,7 +95,7 @@ const Myblogs = () => {
   
   useEffect(() => {
     fetchBlogs();
-  }, [flag , loading , useEffectCaller ]);
+  }, [flag  , useEffectCaller ]);
   
   
 
@@ -126,11 +127,11 @@ const Myblogs = () => {
       );
       setUpdated(true);
       toast.success("Blog updated successfully!");
-      setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
+      //setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
       setIsUpdating(false);
-      setUseEffectCaller(!useEffectCaller);
       setLoading(false);
+      setUseEffectCaller(!useEffectCaller);
     } catch (error) {
       toast.error("Failed to update blog");
     }
