@@ -35,11 +35,14 @@ const Myblogs = () => {
   const [isAdmin , setIsAdmin] = useState<boolean>(false);
   const [ userID , setUserID ] = useState<string>("");
   const [ flag , setFlag ] = useState<boolean>(false);
-  const[updated , setUpdated] = useState<boolean>(false);
-  const fetchBlogs = useCallback(async () => {
+  const [updated , setUpdated] = useState<boolean>(false);
+  const [useEffectCaller , setUseEffectCaller] = useState<boolean>(false);
+
+
+  const fetchBlogs = async () => {
     const token = localStorage.getItem("token") || "";
     let backendCall;
-  
+    
     try {
       // Step 1: Decode the JWT token
       const decodedToken = jwtDecode<CustomJwtPayload>(token);
@@ -85,13 +88,13 @@ const Myblogs = () => {
     } catch (error) {
       console.error("Error fetching blogs:", error);
     } finally {
-      setLoading(!loading);
+      //setLoading(!loading);
     }
-  }, [flag , loading]);
+  };
   
   useEffect(() => {
     fetchBlogs();
-  }, [flag , loading ]);
+  }, [flag , loading , useEffectCaller ]);
   
   
 
@@ -126,6 +129,7 @@ const Myblogs = () => {
       setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
       setEditBlog(null);
       setIsUpdating(false);
+      setUseEffectCaller(!useEffectCaller);
       setLoading(false);
     } catch (error) {
       toast.error("Failed to update blog");
