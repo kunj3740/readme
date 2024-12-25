@@ -61,14 +61,14 @@ const Myblogs = () => {
           setFlag( true );
         } 
         if( updated === true ){
-          backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
-          // Step 4: Make the API call
-          const response = await axios.get(backendCall, {
-            headers: {
-              Authorization: token
-            }
-          });
-          setBlogs(response.data.blogs);
+          // backendCall = `${BACKEND_URL}/api/v1/blog/userid`;
+          // // Step 4: Make the API call
+          // const response = await axios.get(backendCall, {
+          //   headers: {
+          //     Authorization: token
+          //   }
+          // });
+          // setBlogs(response.data.blogs);
           setISloading(false);
           setUpdated(false);
           setLoading(!loading)
@@ -80,8 +80,6 @@ const Myblogs = () => {
             }
             return false; // Exclude this blog from the filtered array
           });
-          console.log(FilteredAsUserBlog);
-    
           setBlogs(FilteredAsUserBlog);
           setISloading(false);
         }
@@ -127,12 +125,23 @@ const Myblogs = () => {
       );
       setUpdated(true);
       toast.success("Blog updated successfully!");
-      //setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : blog));
+      setBlogs(
+        blogs.map(blog =>
+          blog.id === editBlog.id 
+            ? editBlog 
+            : blog.authorId === userID 
+              ? blog 
+              : null
+        ).filter(blog => blog !== null)
+      );    
+//      setBlogs(blogs.map(blog => blog.id === editBlog.id ? editBlog : (blog)));
       setEditBlog(null);
       setIsUpdating(false);
       setLoading(false);
       setUseEffectCaller(!useEffectCaller);
     } catch (error) {
+      setLoading(!loading)
+      setUseEffectCaller(!useEffectCaller)
       toast.error("Failed to update blog");
     }
   };
