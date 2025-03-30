@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useMemo, useState } from "react"
@@ -7,27 +8,44 @@ import { Search, BookOpen, Sun, Moon } from "lucide-react"
 import useContextedBlogs from "../context/theme"
 
 export const Blogs = () => {
-  // const { loading, blogs } = useBlogs()
-  const { blogs, getBlogs  , setLoading , getLoading  } = useContextedBlogs();
-  const [loading , setLoadings ] = useState<boolean>(false);
+  const { blogs, getBlogs, setLoading, getLoading } = useContextedBlogs();
+  const [loading, setLoadings] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([])
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true)
   const isEdge = /Edg/.test(navigator.userAgent)
+  const [selectedCategory, setSelectedCategory] = useState<string>("All")
+
+  // Get unique categories from blogs
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(blogs.map((blog: any) => blog.category?.name));
+    return ["All", ...Array.from(uniqueCategories)];
+  }, [blogs]);
 
   useEffect(() => {
+    // First filter by category
+    let categoryFiltered = blogs;
+    if (selectedCategory !== "All") {
+      categoryFiltered = blogs.filter((blog: any) => 
+        blog.category?.name === selectedCategory
+      );
+    }
     
-    const filteredResults = blogs.filter((blog: any) =>
+    // Then filter by search term
+    const filteredResults = categoryFiltered.filter((blog: any) =>
       blog.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    
     setFilteredBlogs(filteredResults);
-  }, [searchTerm, blogs]);
+  }, [searchTerm, blogs, selectedCategory]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
   }
 
-  
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  }
 
   return (
     <div
@@ -55,6 +73,28 @@ export const Blogs = () => {
           >
             Explore a world of knowledge, creativity, and insights
           </p>
+          
+          {/* Category filter buttons */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryChange(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === category
+                    ? isDarkMode
+                      ? "bg-purple-500 text-white"
+                      : "bg-rose-500 text-white"
+                    : isDarkMode
+                    ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                } shadow-md`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          
           <div className="relative max-w-2xl mx-auto">
             <Search
               className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
@@ -99,7 +139,7 @@ export const Blogs = () => {
                   isDarkMode={isDarkMode}
                 />
               ))
-            ) : searchTerm ? (
+            ) : (
               <div
                 className={`text-center py-16 ${
                   isDarkMode
@@ -124,18 +164,11 @@ export const Blogs = () => {
                     isDarkMode ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
-                  Try adjusting your search terms or explore new topics
+                  {selectedCategory !== "All" 
+                    ? `No blogs found in the "${selectedCategory}" category${searchTerm ? ` matching "${searchTerm}"` : ''}`
+                    : `Try adjusting your search terms or explore new topics`
+                  }
                 </p>
-              </div>
-            ) : (
-              <div
-                className={`space-y-8 w-full flex flex-col items-center ${
-                  isEdge ? "w-full" : "md:w-[80%]"
-                } ${isEdge ? "" : "md:ml-[10%]"}`}
-              >
-                {[...Array(5)].map((_, index) => (
-                  <BlogSkeletons key={index} isDarkMode={isDarkMode} />
-                ))}
               </div>
             )}
           </div>

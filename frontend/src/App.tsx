@@ -14,14 +14,18 @@ import { BlogProvider } from './context/theme'
 import axios from 'axios'
 import { BACKEND_URL } from './config'
 interface Blog {
-  content: string;
-  title: string;
   id: number;
+  title: string;
+  content: string;
   publishedDate: Date;
-  author: {
-      name: string;
+  authorId: string; // Changed from string to number (based on JSON)
+  categoryId: number;
+  category: {
+    name: string;
   };
-  authorId:string;
+  author: {
+    name: string;
+  };
 }
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -98,8 +102,8 @@ function App() {
 
       {!isChatOpen && !hideChatbotPaths.includes(location.pathname) && (
         <GyaniAIButton setIsChatOpen={setIsChatOpen} isDarkMode={isDarkMode} />
-      )}
-      
+      )} 
+            
     </div>
     </BlogProvider>
   )

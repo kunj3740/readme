@@ -88,7 +88,7 @@ export const Appbar = () => {
 
   
   return (
-    <nav className={`  ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'} p-4 w-full shadow-lg shadow-purple-800 transition-colors duration-300`}>
+    <nav className={`  ${isDarkMode ? 'bg-[#0B1120] text-gray-100' : 'bg-gradient-to-br from-orange-100 via-rose-100 to-purple-100'} p-4 w-full shadow-md shadow-purple-800 transition-colors duration-300`}>
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/blogs" className={`text-xl font-semibold items-center ${isEdge ? 'ml-3' : 'ml-[5%]' } flex`}>
           <div className='h-[30px] mr-2'>

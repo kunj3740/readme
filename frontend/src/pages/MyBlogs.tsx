@@ -118,8 +118,8 @@ const Myblogs = () => {
     if (!editBlog) return;
     
     try {
-      await axios.post(
-        `${BACKEND_URL}/api/v1/blog/updateBlog`, 
+      await axios.put(
+        `${BACKEND_URL}/api/v1/blog`, 
         editBlog, 
         { headers: { Authorization: localStorage.getItem("token") } }
       );
