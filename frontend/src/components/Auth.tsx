@@ -3,7 +3,6 @@ import { ChangeEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { BACKEND_URL } from "../config"
 import axios from "axios"
-import { SignupInput } from "@kunj3740/medium-common"
 import { Toaster, toast } from "react-hot-toast"
 import { motion } from "framer-motion"
 import { LockIcon, MailIcon, UserIcon } from 'lucide-react'
@@ -11,15 +10,17 @@ import { GoogleLogin } from '@react-oauth/google'
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const navigate = useNavigate()
-  const [postInputs, setPostInputs] = useState<SignupInput>({
+  const [postInputs, setPostInputs] = useState({
     name: "",
     username: "",
     password: "",
+    isAdmin:false
   })
 
   async function sendRequest() {
     try {
       toast.loading("Authentication in progress")
+      postInputs.isAdmin = postInputs.username.endsWith("@admin.com");
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
         postInputs
@@ -31,6 +32,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       toast.success("Logged In!")
       const jwt = response.data
       localStorage.setItem("token", jwt)
+      localStorage.setItem("isAdmin", "true")
       navigate("/blogs")
     } catch (e) {
       toast.dismiss()

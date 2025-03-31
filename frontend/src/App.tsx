@@ -13,6 +13,7 @@ import { Appbar } from './components/Appbar'
 import { BlogProvider } from './context/theme'
 import axios from 'axios'
 import { BACKEND_URL } from './config'
+import { AdminReportedBlogs } from './components/ReportResolver'
 interface Blog {
   id: number;
   title: string;
@@ -93,6 +94,7 @@ function App() {
           <Route path="/publish" element={<Publish />} />
           <Route path="/" element={<Homepage />} />
           <Route path="/myblogs" element={<Myblogs />} />
+          <Route path="/admin/moderate" element={<AdminReportedBlogs />} />
       </Routes>
 
       {/* Conditionally render the chatbot */}
