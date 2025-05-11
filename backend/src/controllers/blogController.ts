@@ -133,9 +133,11 @@ export const getBlogById = async (c: Context): Promise<Response> => {
 export const deleteBlog = async (c: Context): Promise<Response> => {
   const prisma = getPrisma(c.env);
   const body = await c.req.json();
-
+  console.log(body);
   if (!body.id) return c.json({ message: "Blog ID is required" }, 400);
-
+  await prisma.report.deleteMany({
+    where: { blogId: body.id }
+  });// 
   const blog = await prisma.blog.delete({ where: { id: body.id } });
 
   return c.json({ message: "Blog deleted successfully", blog });

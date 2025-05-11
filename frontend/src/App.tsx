@@ -94,7 +94,7 @@ function App() {
           <Route path="/publish" element={<Publish />} />
           <Route path="/" element={<Homepage />} />
           <Route path="/myblogs" element={<Myblogs />} />
-          <Route path="/admin/moderate" element={<AdminReportedBlogs />} />
+          <Route path="/admin" element={<AdminReportedBlogs />} />
       </Routes>
 
       {/* Conditionally render the chatbot */}

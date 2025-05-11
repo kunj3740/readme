@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Appbar } from "../components/Appbar";
+import  {  useEffect, useState } from "react";
 import { Blog } from '../hooks';
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Pencil, Trash2, Clock, ChevronRight, BookOpen } from "lucide-react";
+import { Pencil, Trash2, Clock, ChevronRight } from "lucide-react";
 import { BlogSkeletons } from "./Blogs";
 import { jwtDecode } from "jwt-decode";
 import useContextedBlogs from "../context/theme";
@@ -23,7 +22,9 @@ interface CustomJwtPayload {
   id: string,
   name : string,
   username : string// Add other fields from your JWT payload if needed
+  isAdmin : boolean
 }
+
 const Myblogs = () => {
   //const [loading, setLoading] = useState(true);
   const[ isloading , setISloading ] = useState(false);

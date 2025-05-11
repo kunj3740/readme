@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import toast from 'react-hot-toast';
-import { PenSquare, User, LogOut, Sun, Moon } from 'lucide-react';
+import { PenSquare, User, LogOut, Sun, Moon, Shield } from 'lucide-react';
 import useContextedBlogs from '../context/theme';
 import { Blog } from '../hooks';
 
@@ -98,7 +98,7 @@ export const Appbar = () => {
             Read-Me
           </div>
         </Link>
-        <div className={`flex items-center justify-center space-x-4 ${isEdge ? '' : 'md:mr-[3%]' }`}>
+        <div className={`flex items-center justify-center md:space-x-4 ${isEdge ? '' : 'md:mr-[3%]' }`}>
                 
           {isLoggedIn ? (
             <>
@@ -113,6 +113,22 @@ export const Appbar = () => {
                 <PenSquare className="w-4 h-4 mr-2" />
                 New
               </Link>
+              
+              {/* Admin button with distinctive styling */}
+              {localStorage.getItem('isAdmin') === 'true' && (
+                <Link
+                  to="/admin"
+                  className={`md:mr-4 mr-2 font-medium rounded-full text-sm px-5 py-2.5 text-center transition duration-300 ease-in-out flex items-center ${
+                    isDarkMode 
+                      ? 'bg-emerald-500 text-black hover:bg-emerald-600 ring-1 ring-emerald-400' 
+                      : 'bg-gradient-to-r from-teal-400 to-emerald-500 text-white hover:from-teal-500 hover:to-emerald-600 shadow-md'
+                  }`}
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  Admin
+                </Link>
+              )}
+              
               <div className="relative">
                 <button 
                   onClick={toggleDropdown} 

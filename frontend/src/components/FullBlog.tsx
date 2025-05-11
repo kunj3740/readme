@@ -210,6 +210,7 @@ import { BACKEND_URL } from '../config'
 import useContextedBlogs from '../context/theme'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { AlertCircle, Flag, X } from 'lucide-react'
+import { jwtDecode } from 'jwt-decode'
 
 interface ThemeProps {
   isDarkMode: boolean;
@@ -236,7 +237,12 @@ const formatDate = (date: string | Date): string => {
   };
   return dateObj.toLocaleDateString('en-GB', options);
 };
-
+interface CustomJwtPayload {
+  id: string,
+  name : string,
+  username : string// Add other fields from your JWT payload if needed
+  isAdmin : boolean
+}
 export const FullBlog = ({ id }: { id: string }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -244,7 +250,7 @@ export const FullBlog = ({ id }: { id: string }) => {
   const [blog, setBlog] = useState<Blog | null>(null);
   const {blogs, getBlogs} = useContextedBlogs();
   const [searchParams] = useSearchParams();
-  
+  const [ userId, setUserID ] = useState("");
   // Report related states
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState("");
@@ -265,6 +271,11 @@ export const FullBlog = ({ id }: { id: string }) => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if( token ){
+          const decodedToken = jwtDecode<CustomJwtPayload>(token);
+          setUserID(decodedToken.id);
+        }
         setIsLoading(true);
         console.log(searchParams.get('Published'));
         if(searchParams.get('Published')){
@@ -508,7 +519,7 @@ export const FullBlog = ({ id }: { id: string }) => {
                       {blog?.title}
                     </div>
                     
-                    <button
+                    {blog && blog.authorId && blog.authorId !== userId && <button
                       onClick={() => setIsReportModalOpen(true)}
                       className={`flex items-center p-2 rounded-md ${
                         isDarkMode 
@@ -519,6 +530,7 @@ export const FullBlog = ({ id }: { id: string }) => {
                     >
                       <Flag size={18} />
                     </button>
+                    }
                   </div>
                   
                   <div

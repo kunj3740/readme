@@ -8,7 +8,7 @@ blogRouter.use("/*", async (c: Context, next: Next): Promise<void> => {
   const authHeader = c.req.header("authorization") || "";
 
   try {
-    const user = await verify(authHeader, c.env.JWT_SECRET);
+    const user = await verify( authHeader,c.env.JWT_SECRET || "kunjdave");
 
     if (user) {
       c.set("userId", user.id);

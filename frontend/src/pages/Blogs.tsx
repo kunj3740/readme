@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useMemo, useState } from "react"
@@ -31,9 +30,10 @@ export const Blogs = () => {
       );
     }
     
-    // Then filter by search term
+    // Then filter by search term (now includes author name and title)
     const filteredResults = categoryFiltered.filter((blog: any) =>
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase())
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      blog.author.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     
     setFilteredBlogs(filteredResults);
@@ -110,7 +110,7 @@ export const Blogs = () => {
                   ? "bg-gray-800 border-purple-500 text-white placeholder-gray-400 focus:border-pink-400"
                   : "bg-white border-rose-200 text-gray-800 placeholder-gray-500 focus:border-purple-400"
               } focus:ring focus:ring-opacity-50 shadow-lg transition-all duration-300 ease-in-out`}
-              placeholder="Search blogs..."
+              placeholder="Search by title or author..."
             />
           </div>
         </div>
