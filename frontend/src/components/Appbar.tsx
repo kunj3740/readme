@@ -82,6 +82,7 @@ export const Appbar = () => {
       },
     });
     localStorage.removeItem('token');
+    localStorage.removeItem("isAdmin");
     setIsLoggedIn(false);
     navigate('/');
   };
