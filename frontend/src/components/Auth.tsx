@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { BACKEND_URL } from "../config"
 import axios from "axios"
-import { Toaster, toast } from "react-hot-toast"
+import {  toast } from "react-hot-toast"
 import { motion } from "framer-motion"
 import { LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { GoogleLogin } from '@react-oauth/google'
@@ -32,7 +32,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       toast.success("Logged In!")
       const jwt = response.data
       localStorage.setItem("token", jwt)
-      localStorage.setItem("isAdmin", "true")
+      if( postInputs.isAdmin  ){
+        localStorage.setItem("isAdmin", "true")
+      }
+      
       navigate("/blogs")
     } catch (e) {
       toast.dismiss()
@@ -156,14 +159,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           >
             {type === "signup" ? "Create Account" : "Sign In"}
           </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={LoginAsGuest}
-            className="w-full text-indigo-600 bg-white border-2 border-indigo-600 hover:bg-indigo-50 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-3 transition-all duration-300 ease-in-out mt-4"
-          >
-            Login as Guest
-          </motion.button>
+          
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>

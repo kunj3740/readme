@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import toast from 'react-hot-toast';
-import { PenSquare, User, LogOut, Sun, Moon, Shield } from 'lucide-react';
+import { PenSquare, User, LogOut, Shield } from 'lucide-react';
 import useContextedBlogs from '../context/theme';
 import { Blog } from '../hooks';
 
@@ -82,6 +82,7 @@ export const Appbar = () => {
       },
     });
     localStorage.removeItem('token');
+    localStorage.removeItem("isAdmin");
     setIsLoggedIn(false);
     navigate('/');
   };
